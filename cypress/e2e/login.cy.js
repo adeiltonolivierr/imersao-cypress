@@ -19,11 +19,11 @@
     cy.get(".invalid_input").should("have.text", "Senha inválida.");
   });
 
-  it("login com email invállllido", () => {
+  it("login com email inválido", () => {
     cy.get("#user").type("email_invalido");
     cy.get("#password").type("senha123");
     cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "E-mail invállllido.");
+    cy.get(".invalid_input").should("contain.text", "E-mail inválido.");
   });
 
   it("login com campos vazios", () => {
