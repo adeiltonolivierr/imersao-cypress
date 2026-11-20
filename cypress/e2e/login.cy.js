@@ -1,76 +1,77 @@
-//funcionalidade - suite de teste
+import loginPage from "../pages/LoginPage";
 
- describe("Login", () => {
+describe("Login", () => {
   beforeEach(() => {
-    cy.visit("https://automationpratice.com.br/login");
+    loginPage.visitar();
   });
 
   it("Login com sucesso", () => {
-    cy.get("#user").type("usuario@exemplo.com");
-    cy.get("#password").type("senha123");
-    cy.get("#btnLogin").click();
-    cy.get("#swal2-title").should("have.text", "Login realizado");
+    loginPage.preencherEmail("usuario@exemplo.com");
+    loginPage.preencherSenha("senha123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemSucesso().should("have.text", "Login realizado");
   });
 
   it("Login com senha errada", () => {
-    cy.get("#user").type("usuario@exemplo.com");
-    cy.get("#password").type("123");
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("have.text", "Senha inválida.");
+    loginPage.preencherEmail("usuario@exemplo.com");
+    loginPage.preencherSenha("123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("have.text", "Senha inválida.");
   });
 
   it("login com email inválido", () => {
-    cy.get("#user").type("email_invalido");
-    cy.get("#password").type("senha123");
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "E-mail inválido.");
+    loginPage.preencherEmail("email_invalido");
+    loginPage.preencherSenha("senha123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("contain.text", "E-mail inválido.");
   });
 
   it("login com campos vazios", () => {
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("be.visible");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("be.visible");
   });
 
   it("login sem informar a senha", () => {
-    cy.get("#user").type("usuario@exemplo.com");
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "Senha inválida.");
+    loginPage.preencherEmail("usuario@exemplo.com");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("contain.text", "Senha inválida.");
   });
-   it("login com campo email vazio", () => {
-    cy.get("#password").type("senha123")
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "E-mail inválido.");
+
+  it("login com campo email vazio", () => {
+    loginPage.preencherSenha("senha123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("contain.text", "E-mail inválido.");
   });
-    it("login com email sem arroba", () => {
-    cy.get("#user").type("usuarioexemplo.com");
-    cy.get("#password").type("senha123");
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "E-mail inválido.");
+
+  it("login com email sem arroba", () => {
+    loginPage.preencherEmail("usuarioexemplo.com");
+    loginPage.preencherSenha("senha123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("contain.text", "E-mail inválido.");
   });
-  
+
   it("login com espaço antes do email", () => {
-    cy.get("#user").type(" usuario@exemplo.com");
-    cy.get("#password").type("senha123");
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "E-mail inválido.");
+    loginPage.preencherEmail(" usuario@exemplo.com");
+    loginPage.preencherSenha("senha123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("contain.text", "E-mail inválido.");
   });
-  
+
   it("login com espaço depois do email", () => {
-    cy.get("#user").type("usuario@exemplo.com ");
-    cy.get("#password").type("senha123");
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "E-mail inválido.");
+    loginPage.preencherEmail("usuario@exemplo.com ");
+    loginPage.preencherSenha("senha123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("contain.text", "E-mail inválido.");
   });
 
   it("Corrige o email inválido e tenta realizar login novamente", () => {
-    cy.get("#user").type("email_invalido");
-    cy.get("#password").type("senha123");
-    cy.get("#btnLogin").click();
-    cy.get(".invalid_input").should("contain.text", "E-mail inválido.");
+    loginPage.preencherEmail("email_invalido");
+    loginPage.preencherSenha("senha123");
+    loginPage.clicarEntrar();
+    loginPage.mensagemErro().should("contain.text", "E-mail inválido.");
 
-    cy.get("#user").clear().type("usuario@exemplo.com");
-    cy.get("#btnLogin").click();
-    cy.get("#swal2-title").should("have.text", "Login realizado");
-    
+    loginPage.preencherEmail("usuario@exemplo.com");
+    loginPage.clicarEntrar();
+    loginPage.mensagemSucesso().should("have.text", "Login realizado");
   });
 });
